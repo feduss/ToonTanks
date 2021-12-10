@@ -16,9 +16,8 @@ public:
 	ABasePawn();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
+	void RotateCannon(FVector Value);
+	void InstantiateProjectile();
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* CapsuleComponent = nullptr;
@@ -28,8 +27,7 @@ private:
 	UStaticMeshComponent* Cannon = nullptr;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint = nullptr;
+
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };

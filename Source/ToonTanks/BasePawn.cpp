@@ -3,6 +3,7 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -29,17 +30,21 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(Cannon);
 }
 
-// Called when the game starts or when spawned
-void ABasePawn::BeginPlay()
-{
-	Super::BeginPlay();
-	
+void ABasePawn::RotateCannon(FVector Value) {
+	FVector TargetLocation = Value - Cannon->GetComponentLocation();
+	FRotator TargetRotation = FRotator(0.f, TargetLocation.Rotation().Yaw, 0.f);
+	Cannon->SetWorldRotation(TargetRotation);
 }
 
-// Called every frame
-void ABasePawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+void ABasePawn::InstantiateProjectile() {
+	DrawDebugSphere(
+		GetWorld(),
+		ProjectileSpawnPoint->GetComponentLocation(),
+		30.f,
+		12,
+		FColor::Red,
+		false,
+		3.0f
+	);
 }
 

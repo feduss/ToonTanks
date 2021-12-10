@@ -2,6 +2,8 @@
 
 #include "Tank.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+#define out
 
 ATank::ATank() {
 	//Create a USpringArmComponent
@@ -15,6 +17,48 @@ ATank::ATank() {
 
 }
 
+// Called when the game starts or when spawned
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//The player controller will be useful to get the hitresult of 2d mouse movement into the 3d map
+	PlayerController = Cast<APlayerController>(GetController());
+
+}
+
+// Called every frame
+void ATank::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (PlayerController != nullptr) {
+		FHitResult HitResult;
+
+		//Get HitResult from a mouse linetrace
+		bool hit = PlayerController->GetHitResultUnderCursor(
+			ECollisionChannel::ECC_Visibility, //Hit object the block visibility channel (aka linetrace?)
+			false, //bTraceComplex false = 
+			out HitResult
+			);
+
+		if (hit) {
+			/*DrawDebugSphere(
+				GetWorld(),
+				HitResult.ImpactPoint, //center
+				10.f,				   //radius of the sphere
+				12,                    //number of segments of the sphere
+				FColor::Red,
+				false,                 //percistent false
+				-1.0f                  //lifetime: 1 frame
+			);*/
+			RotateCannon(HitResult.ImpactPoint);
+
+		}
+	}
+
+}
+
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -23,6 +67,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//Bind axis "MoveForward" to function Move
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
 
 }
 
@@ -43,4 +89,8 @@ void ATank::Turn(float Value) {
 	DeltaRotation.Yaw += Value * RotationSpeed * Deltatime;
 
 	AddActorLocalRotation(DeltaRotation, true);
+}
+
+void ATank::Fire() {
+	InstantiateProjectile();
 }
