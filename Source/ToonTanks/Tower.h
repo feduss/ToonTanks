@@ -21,9 +21,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 private:
+	void CheckFireCondition();
+	bool InFireRange();
+
 	class ATank* Tank = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Attributes")
 	float FireRange = 1000.f;
+
+	struct FTimerHandle FireRateTimerHandle;
+	float FireRate = 2.f;
+	float Distance = 999.f;
 	
 };

@@ -4,6 +4,7 @@
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Projectile.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -37,7 +38,7 @@ void ABasePawn::RotateCannon(FVector Value) {
 }
 
 void ABasePawn::InstantiateProjectile() {
-	DrawDebugSphere(
+	/*DrawDebugSphere(
 		GetWorld(),
 		ProjectileSpawnPoint->GetComponentLocation(),
 		30.f,
@@ -45,6 +46,10 @@ void ABasePawn::InstantiateProjectile() {
 		FColor::Red,
 		false,
 		3.0f
-	);
+	);*/
+	GetWorld()->SpawnActor<AProjectile>(
+		Projectile,
+		ProjectileSpawnPoint->GetComponentLocation(),
+		ProjectileSpawnPoint->GetComponentRotation());
 }
 
