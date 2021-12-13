@@ -27,5 +27,11 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 	UStaticMeshComponent* Projectile = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
+
+	UFUNCTION()//it's like UPROPERTY, but for function
+	void OnHit(UPrimitiveComponent* PrimitiveComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+		FVector Impulse, const FHitResult& HitResult);
 
 };

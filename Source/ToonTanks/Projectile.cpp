@@ -2,6 +2,7 @@
 
 
 #include "Projectile.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -13,12 +14,20 @@ AProjectile::AProjectile()
 
 	RootComponent = Projectile;
 
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projecile Movement"));
+
+	ProjectileMovementComponent->InitialSpeed = 1500.f;
+	ProjectileMovementComponent->MaxSpeed = 1500.f;
+
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//multi cast delegate to bind the hit event of this class to a function
+	Projectile->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
 }
 
@@ -27,5 +36,11 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AProjectile::OnHit(UPrimitiveComponent* PrimitiveComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector Impulse, const FHitResult& HitResult) {
+	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s, %OtherComp: %s, HitResult: %s"), *OtherActor->GetName(), 
+		*OtherComp->GetName(), *HitResult.GetActor()->GetName());
 }
 
