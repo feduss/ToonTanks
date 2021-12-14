@@ -3,6 +3,9 @@
 
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
+#include "GameFramework/Controller.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -40,7 +43,20 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent* PrimitiveComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector Impulse, const FHitResult& HitResult) {
-	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s, %OtherComp: %s, HitResult: %s"), *OtherActor->GetName(), 
-		*OtherComp->GetName(), *HitResult.GetActor()->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s, %OtherComp: %s, HitResult: %s"), *OtherActor->GetName(), 
+	//	*OtherComp->GetName(), *HitResult.GetActor()->GetName());
+
+	auto MyOwner = GetOwner();
+	if (MyOwner != nullptr) {
+		AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
+		UClass* DamageTypeClass = UDamageType::StaticClass();
+
+		//If there is a damaged actor and if the damaged actor isn't ourself or our parent (there's no auto damaged lol)
+		if (OtherActor != nullptr && OtherActor != this && OtherActor != MyOwner) {
+			UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
+		}
+	}
+
+	this->Destroy();
 }
 

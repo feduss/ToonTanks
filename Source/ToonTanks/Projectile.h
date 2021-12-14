@@ -25,6 +25,9 @@ public:
 
 private:
 
+	UPROPERTY(EditAnywhere, Category = "Stats")
+	float Damage = 50.f;
+
 	UPROPERTY(EditAnywhere, Category = "Components")
 	UStaticMeshComponent* Projectile = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")

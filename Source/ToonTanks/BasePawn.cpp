@@ -47,9 +47,16 @@ void ABasePawn::InstantiateProjectile() {
 		false,
 		3.0f
 	);*/
-	GetWorld()->SpawnActor<AProjectile>(
-		Projectile,
-		ProjectileSpawnPoint->GetComponentLocation(),
-		ProjectileSpawnPoint->GetComponentRotation());
+	//Spawn a projectile in projectile spawn point
+	//and set this class its owner
+	//this because the projectile is spawned dinamically and could not have an owner
+	//the owner will be useful to take damage in HealthComponent.cpp
+	AProjectile* SpawnedProjectileRef = GetWorld()->SpawnActor<AProjectile>(
+				Projectile,
+				ProjectileSpawnPoint->GetComponentLocation(),
+				ProjectileSpawnPoint->GetComponentRotation());
+	if (SpawnedProjectileRef != nullptr) {
+		SpawnedProjectileRef->SetOwner(this);
+	}
 }
 

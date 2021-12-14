@@ -9,8 +9,14 @@ ATank::ATank() {
 	//Create a USpringArmComponent
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm Component"));
 
+	SpringArmComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+
+	SpringArmComponent->SetupAttachment(RootComponent);
+
 	//Create a UCameraComponent
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera Component"));
+
+	CameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 
 	//Attach CameraComponent to SpringArmComponent as child
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -55,6 +61,9 @@ void ATank::Tick(float DeltaTime)
 			RotateCannon(HitResult.ImpactPoint);
 
 		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("PlayerController is null"));
 	}
 
 }
