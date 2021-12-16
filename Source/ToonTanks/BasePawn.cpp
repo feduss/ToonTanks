@@ -60,3 +60,10 @@ void ABasePawn::InstantiateProjectile() {
 	}
 }
 
+void ABasePawn::HandleDestruction() {
+
+	//Play sound and VX effect for the death
+
+
+}
+

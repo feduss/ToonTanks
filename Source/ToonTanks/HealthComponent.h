@@ -29,6 +29,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Stats")
 	float MaxHealth = 100.f;
 	float CurrentHealth = 0;
+	class AToonTanksGameMode* ToonTanksGameMode = nullptr;
 
 	//Who will receive the damage, the damage in float, type of damage (because we are bind this function to a generic onTakeAnyDamage)
 	//the istigator is the damage causer if it's a pawn possessed by a real player, null otherwise

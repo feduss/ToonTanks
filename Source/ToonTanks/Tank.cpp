@@ -103,3 +103,12 @@ void ATank::Turn(float Value) {
 void ATank::Fire() {
 	InstantiateProjectile();
 }
+
+void ATank::HandleDestruction() {
+	Super::HandleDestruction();
+
+	//Instead of destroy the tank, hide the tank
+	//And disabled tick function
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+}

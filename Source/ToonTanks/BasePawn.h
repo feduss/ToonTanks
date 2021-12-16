@@ -15,6 +15,9 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 
+	//Public because is called from gamemode
+	void HandleDestruction();
+
 protected:
 	void RotateCannon(FVector Value);
 	void InstantiateProjectile();
