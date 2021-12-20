@@ -69,7 +69,7 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor) {
 }
 
 int32 AToonTanksGameMode::GetNumberOfTowers() {
-	TArray<ATower*> Towers = TArray<ATower*>();
+	TArray<AActor*> Towers;
 	UGameplayStatics::GetAllActorsOfClass(this, ATower::StaticClass(), Towers);
 	return Towers.Num();
 }

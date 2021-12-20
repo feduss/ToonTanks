@@ -36,7 +36,7 @@ void ATower::Tick(float DeltaTime)
 
 void ATower::CheckFireCondition() {
 
-	if (InFireRange()) {
+	if (InFireRange() && Tank != nullptr && Tank->bAlive) {
 		InstantiateProjectile();
 	}
 }

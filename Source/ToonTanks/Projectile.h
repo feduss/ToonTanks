@@ -37,4 +37,16 @@ private:
 	void OnHit(UPrimitiveComponent* PrimitiveComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		FVector Impulse, const FHitResult& HitResult);
 
+	UPROPERTY(Editanywhere, Category = "Effects")
+	class UParticleSystem* HitEffect = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	class UParticleSystemComponent* SmokeTrail = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	class USoundBase* HitSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<class UCameraShakeBase> HitCameraShakeClass = nullptr;
+
 };

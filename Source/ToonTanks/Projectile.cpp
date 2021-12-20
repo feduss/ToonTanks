@@ -6,6 +6,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
 #include "GameFramework/Controller.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Camera/CameraShakeBase.h"
+#include "GameFramework/PlayerController.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -22,6 +25,8 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent->InitialSpeed = 1500.f;
 	ProjectileMovementComponent->MaxSpeed = 1500.f;
 
+	SmokeTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
+	SmokeTrail->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -55,7 +60,23 @@ void AProjectile::OnHit(UPrimitiveComponent* PrimitiveComp, AActor* OtherActor, 
 		if (OtherActor != nullptr && OtherActor != this && OtherActor != MyOwner) {
 			UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
 		}
+
+		if (HitEffect != nullptr) {
+			//Visual hit effect
+			UGameplayStatics::SpawnEmitterAtLocation(this, HitEffect, GetActorLocation(), GetActorRotation());
+		}
+
+		if (HitSound != nullptr) {
+			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+		}
+
+		if (HitCameraShakeClass != nullptr) {
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
+		}
 	}
+
+
+
 
 	this->Destroy();
 }

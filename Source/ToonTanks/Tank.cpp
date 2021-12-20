@@ -111,4 +111,5 @@ void ATank::HandleDestruction() {
 	//And disabled tick function
 	SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
+	bAlive = false;
 }

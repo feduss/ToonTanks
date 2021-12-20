@@ -34,6 +34,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Misc")
 	TSubclassOf<class AProjectile> Projectile;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	class UParticleSystem* ExplosionDeadEffect = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	class USoundBase* ExplosionDeadSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<class UCameraShakeBase> DeadCameraShakeClass = nullptr;
+
 public:	
 
 };
