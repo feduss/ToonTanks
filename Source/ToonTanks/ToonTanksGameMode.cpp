@@ -7,6 +7,42 @@
 #include "Tower.h"
 #include "ToonTanksPlayerController.h"
 
+
+void AToonTanksGameMode::BeginPlay() {
+	Super::BeginPlay();
+
+	HandleGameStart();
+
+	NumberOfTowers = GetNumberOfTowers();
+}
+
+void AToonTanksGameMode::HandleGameStart() {
+	Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+
+	if (ToonTanksPlayerController != nullptr) {
+		StartGame();
+		ToonTanksPlayerController->SetPlayerEnabledState(false);
+
+		FTimerHandle PlayerEnabledTimerHandle;
+
+		//FTimerDelegate is useful to call a function that requires params when a timer expires
+		FTimerDelegate InputDelegate = FTimerDelegate::CreateUObject(
+			ToonTanksPlayerController,
+			&AToonTanksPlayerController::SetPlayerEnabledState,
+			true);
+
+		//After StartDelay(seconds), call SetPlayerEnabledState in ToonTanksPlayerController
+		GetWorldTimerManager().SetTimer(
+			PlayerEnabledTimerHandle,
+			InputDelegate,
+			StartDelay,
+			false //not looping
+			);
+	}
+}
+
+
 void AToonTanksGameMode::ActorDied(AActor* DeadActor) {
 	//If the dead actor is the tank, call its handle destruction function
 	//disable input and the mouse cursor
@@ -15,6 +51,7 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor) {
 		if (ToonTanksPlayerController != nullptr) {
 			ToonTanksPlayerController->SetPlayerEnabledState(false);
 		}
+		GameOver(false);
 	}
 	else {
 		ATower* Tower = Cast<ATower>(DeadActor);
@@ -22,13 +59,17 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor) {
 		if (Tower != nullptr) {
 			Tower->HandleDestruction();
 		}
+
+		NumberOfTowers--;
+
+		if (NumberOfTowers == 0) {
+			GameOver(true);
+		}
 	}
 }
 
-void AToonTanksGameMode::BeginPlay() {
-	Super::BeginPlay();
-
-	Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
-	ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
-
+int32 AToonTanksGameMode::GetNumberOfTowers() {
+	TArray<ATower*> Towers = TArray<ATower*>();
+	UGameplayStatics::GetAllActorsOfClass(this, ATower::StaticClass(), Towers);
+	return Towers.Num();
 }

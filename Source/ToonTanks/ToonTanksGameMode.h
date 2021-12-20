@@ -21,7 +21,22 @@ protected:
 
 	void BeginPlay() override;
 
+	//Blueprint implementable event is a event that you implement in blueprint but you can call in c++
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartGame();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bGameWon); //if true, handle display VX of victory
+
 private:
+	void HandleGameStart();
+
 	class ATank* Tank;
 	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
+
+	float StartDelay = 3.f;
+
+	int32 NumberOfTowers = 0;
+	int32 GetNumberOfTowers();
+
 };
